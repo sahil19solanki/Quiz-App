@@ -137,8 +137,45 @@ class Questions : AppCompatActivity(), View.OnClickListener {
                }
            }
            R.id.btn_sub->{
+                    if(mSelectedOptionPosition==0){
+                        mCurrentPosition++
 
+                        when{
+                            mCurrentPosition <=mQuestionList!!.size ->{
+                                setQuestion()
+                            }
+                        }
+                    }else{
+                        val question = mQuestionList?.get(mCurrentPosition-1)
+                        if(question!!.Cans!=mSelectedOptionPosition){
+                            answerView(mSelectedOptionPosition,R.drawable.wrong_bg)
+                        }
+                        answerView(question.Cans,R.drawable.correct_bg)
+                        if(mCurrentPosition == mQuestionList!!.size){
+                            btnSubmit?.text="FINSH"
+                        }else{
+                            btnSubmit?.text="NEXT QUESTION"
+                        }
+                        mSelectedOptionPosition=0
+                    }
            }
        }
+    }
+
+    private fun answerView(answer:Int,drawable:Int){
+        when(answer){
+            1 ->{
+                opOne?.background=ContextCompat.getDrawable(this,drawable)
+            }
+            2 ->{
+                opTwo?.background=ContextCompat.getDrawable(this,drawable)
+            }
+            3 ->{
+                opThree?.background=ContextCompat.getDrawable(this,drawable)
+            }
+            4 ->{
+                opFour?.background=ContextCompat.getDrawable(this,drawable)
+            }
+        }
     }
 }
