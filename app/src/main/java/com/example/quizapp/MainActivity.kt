@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
            }
             else{
                 val intent= Intent(this,Questions::class.java)
+               intent.putExtra(q_9.USER_NAME,Ip.text.toString())
                  startActivity(intent)
 
            }

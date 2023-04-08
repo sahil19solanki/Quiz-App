@@ -1,15 +1,13 @@
 package com.example.quizapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 
 class Questions : AppCompatActivity(), View.OnClickListener {
@@ -17,6 +15,8 @@ class Questions : AppCompatActivity(), View.OnClickListener {
     private var mCurrentPosition:Int=1
     private var mQuestionList:ArrayList<QuesModel>?=null
     private var mSelectedOptionPosition:Int=0
+    private var mUserName:String?=null
+    private var mCorrectAnswer:Int = 0
 
     //for finding elements
     private var progressBar: ProgressBar?=null
@@ -34,6 +34,8 @@ class Questions : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_questions)
+
+        mUserName = intent.getStringExtra(q_9.USER_NAME)
 
         //finding elements
         progressBar=findViewById(R.id.Prog)
@@ -60,6 +62,7 @@ class Questions : AppCompatActivity(), View.OnClickListener {
 
 
     private fun setQuestion() {
+        defaultOPtionView()
         val question: QuesModel = mQuestionList!![mCurrentPosition - 1]
         iView?.setImageResource(question.image)
         progressBar?.progress = mCurrentPosition
@@ -144,11 +147,21 @@ class Questions : AppCompatActivity(), View.OnClickListener {
                             mCurrentPosition <=mQuestionList!!.size ->{
                                 setQuestion()
                             }
+                            else ->{
+                               val intent = Intent(this,Result_activity::class.java)
+                                intent.putExtra(q_9.USER_NAME,mUserName)
+                                intent.putExtra(q_9.CORRECT_ANSWER,mCorrectAnswer)
+                                intent.putExtra(q_9.Total_Q,mQuestionList?.size)
+                                startActivity(intent)
+                                finish()
+                            }
                         }
                     }else{
                         val question = mQuestionList?.get(mCurrentPosition-1)
                         if(question!!.Cans!=mSelectedOptionPosition){
                             answerView(mSelectedOptionPosition,R.drawable.wrong_bg)
+                        }else{
+                            mCorrectAnswer++
                         }
                         answerView(question.Cans,R.drawable.correct_bg)
                         if(mCurrentPosition == mQuestionList!!.size){
